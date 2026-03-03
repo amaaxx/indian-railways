@@ -2,7 +2,7 @@
 
 A modernized, responsive intranet portal designed for Banaras Locomotive Works (BLW). This dashboard aggregates critical enterprise applications, BI dashboards, and employee portals into a single, high-performance interface.
 
-**🔗 [View Live Deployment here](https://[your-username].github.io/[your-repo-name]/)**
+**🔗 [View Live Deployment here](https://indian-railways-six.vercel.app/)**
 *(Note: Internal `10.x.x.x` intranet links are accurately mapped and will naturally time out if accessed outside the Railway network).*
 
 ## 🏗️ The Engineering Approach
@@ -23,6 +23,9 @@ For a static directory portal, a Virtual DOM and client-side rendering introduce
 Because this relies on a strict Separation of Concerns (Structure, Style, Logic) with zero dependencies, local execution is instant.
 1. Clone the repository.
 2. Open `index.html` directly in any modern web browser.
+
+## 🌐 Deployment
+This portal is deployed via **Vercel** to ensure high availability and fast content delivery (CDN) for users across the railway network.
 
 ---
 *Developed by Amaan Ansari* *Pursuing B.Tech in Computer Science at Jamia Millia Islamia.*
