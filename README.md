@@ -1,31 +1,88 @@
 # BLW Centralized Digital Workspace
 
-A modernized, responsive intranet portal designed for Banaras Locomotive Works (BLW). This dashboard aggregates critical enterprise applications, BI dashboards, and employee portals into a single, high-performance interface.
+A modern, lightweight entry point for the Banaras Locomotive Works (BLW) intranet ecosystem.
 
-**🔗 [View Live Deployment here](https://indian-railways-six.vercel.app/)**
-*(Note: Internal `10.x.x.x` intranet links are accurately mapped and will naturally time out if accessed outside the Railway network).*
+This portal consolidates critical enterprise applications, BI dashboards, and employee tools into one structured interface — designed for speed, clarity, and long-term maintainability.
 
-## 🏗️ The Engineering Approach
+🔗 **Live Deployment:**  
+https://indian-railways-six.vercel.app/
 
-When looking at the legacy directory, the immediate temptation was to spin up a React or Vue application. I actively decided against that, opting instead for **strictly Vanilla HTML, CSS, and ES6 JavaScript**. 
-
-**Why?**
-For a static directory portal, a Virtual DOM and client-side rendering introduce unnecessary overhead. By keeping the stack vanilla, the bundle size remains virtually zero, requiring no build step (Webpack/Vite). This ensures maximum compatibility and instantaneous deployment. The IT team can drop these three files directly onto BLW's existing internal servers (IIS/Apache) without configuring a Node.js environment.
-
-## 🚀 Key Features Built
-
-* **Zero-Latency Search:** Instead of querying a backend, the search bar uses real-time DOM traversal. It filters through 50+ application nodes instantly as the user types.
-* **Security Hardening:** A critical vulnerability in static dashboards is the `target="_blank"` exploit (Reverse Tabnabbing). Every external link in this portal is hardcoded with `rel="noopener noreferrer"` to sever the JavaScript thread and protect the internal intranet from external cross-tab phishing.
-* **Emergency Broadcast Modal:** Engineered a modular, top-layer modal that intercepts the screen on load for critical IT or administrative alerts. 
-* **Responsive Architecture:** Built on a strict CSS Flexbox/Grid foundation that gracefully degrades from a multi-column desktop view into a touch-friendly mobile interface.
-
-## 🛠️ Local Setup
-Because this relies on a strict Separation of Concerns (Structure, Style, Logic) with zero dependencies, local execution is instant.
-1. Clone the repository.
-2. Open `index.html` directly in any modern web browser.
-
-## 🌐 Deployment
-This portal is deployed via **Vercel** to ensure high availability and fast content delivery (CDN) for users across the railway network.
+> Note: Internal `10.x.x.x` intranet links are intentionally mapped and will only function inside the Railway network. They will naturally time out if accessed externally.
 
 ---
-*Developed by Amaan Ansari* *Pursuing B.Tech in Computer Science at Jamia Millia Islamia.*
+
+## 🏗️ Technical Choice: Vanilla Over Frameworks
+
+For this project, I intentionally avoided React or Vue and chose **Vanilla HTML, CSS, and ES6 JavaScript**.
+
+### Why?
+
+Government and enterprise intranet environments typically operate under strict infrastructure and security constraints. Adding a frontend framework would introduce:
+
+- A Node.js runtime requirement  
+- Build tooling (Webpack/Vite)  
+- Larger bundle sizes  
+- Unnecessary abstraction for a static directory  
+
+Since this is a static portal, those layers would only add overhead.
+
+By keeping the stack vanilla:
+
+- No build step is required  
+- Zero external dependencies  
+- Maximum compatibility with IIS/Apache servers  
+- Minimal attack surface  
+- Instant deployment  
+
+The IT team can simply place the files on the server — and it works.
+
+---
+
+## 🚀 What’s Under the Hood?
+
+### 🔎 Instant Search
+
+A high-performance DOM filtering system that scans 50+ application links in real time as the user types.  
+No backend calls. No loading states. Immediate feedback.
+
+### 🔐 Safety First
+
+All external links using `target="_blank"` are secured with:
+
+```html
+rel="noopener noreferrer"
+```
+
+This prevents reverse tabnabbing and cross-tab exploitation — a commonly overlooked vulnerability in static dashboards.
+
+### 📢 Emergency Broadcast Modal
+
+A modular top-layer modal system designed to display urgent IT or administrative alerts on page load.  
+Easily configurable without restructuring the layout.
+
+### 📱 Adaptive UI
+
+Built using CSS Flexbox and Grid.  
+Transitions smoothly from a structured multi-column desktop layout to a clean, touch-friendly mobile interface.
+
+---
+
+## 🛠️ Local Setup
+
+No dependencies. No installation.
+
+1. Clone the repository  
+2. Open `index.html` in any modern browser  
+
+That’s it.
+
+---
+
+## 🌐 Deployment
+
+Deployed via Vercel for high availability and fast CDN delivery.
+
+---
+
+*Amaan Ansari*  
+*B.Tech Computer Science — Jamia Millia Islamia*
