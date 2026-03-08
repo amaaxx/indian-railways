@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- API Configuration (Smart Routing) ---
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const API_BASE_URL = isLocal ? 'http://127.0.0.1:8000' : 'https://blw-secure-api.onrender.com';
+
     // --- File Name Display Logic ---
     const excelInput = document.getElementById('excelInput');
     const excelFileName = document.getElementById('excelFileName');
@@ -7,13 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const bannerFileName = document.getElementById('bannerFileName');
 
     if (excelInput && excelFileName) {
-        excelInput.addEventListener('change', function(e) {
+        excelInput.addEventListener('change', (e) => {
             excelFileName.textContent = e.target.files[0] ? e.target.files[0].name : 'No file selected';
         });
     }
 
     if (bannerInput && bannerFileName) {
-        bannerInput.addEventListener('change', function(e) {
+        bannerInput.addEventListener('change', (e) => {
             bannerFileName.textContent = e.target.files[0] ? e.target.files[0].name : 'No file selected';
         });
     }
@@ -25,61 +29,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (uploadExcelBtn && excelInput && statusDiv) {
         uploadExcelBtn.addEventListener('click', async () => {
             
-            // 1. Validate a file is actually selected
             if (!excelInput.files[0]) {
                 alert("Please select an Excel or CSV file first!");
                 return;
             }
 
-            // 2. Package the file for transmission
             const formData = new FormData();
             formData.append("file", excelInput.files[0]);
 
-            // 3. Update UI to show loading state
             uploadExcelBtn.textContent = "Syncing Database...";
             uploadExcelBtn.style.opacity = "0.7";
             uploadExcelBtn.disabled = true;
             statusDiv.style.display = "none";
-            statusDiv.className = "status-message"; // Reset classes
+            statusDiv.className = "status-message"; // Reset classes entirely
 
             try {
-                // 4. Send the file to your Python Server
-                const response = await fetch('http://127.0.0.1:8000/api/upload-excel/', {
+                const response = await fetch(`${API_BASE_URL}/api/upload-excel/`, {
                     method: 'POST',
                     body: formData
                 });
 
                 const result = await response.json();
 
-                // 5. Handle the Server's Response
                 if (response.ok) {
                     statusDiv.textContent = `Success: ${result.total_records} employee records synchronized!`;
                     statusDiv.classList.add("status-success");
-                    statusDiv.style.display = "block";
+                    statusDiv.style.cssText = "display: block;"; // Clears inline red errors
                     
-                    // Reset the form
                     excelInput.value = "";
                     excelFileName.textContent = 'No file selected';
                 } else {
-                    // Show exact error from Python (e.g., missing columns)
                     statusDiv.textContent = `Error: ${result.detail}`;
-                    statusDiv.style.background = "#fee2e2";
-                    statusDiv.style.color = "#b91c1c";
-                    statusDiv.style.display = "block";
+                    statusDiv.style.cssText = "background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; display: block;";
                 }
             } catch (error) {
                 statusDiv.textContent = "Network Error: Is the FastAPI server running?";
-                statusDiv.style.background = "#fee2e2";
-                statusDiv.style.color = "#b91c1c";
-                statusDiv.style.display = "block";
+                statusDiv.style.cssText = "background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; display: block;";
             } finally {
-                // Restore button state
-                uploadExcelBtn.textContent = "Sync Database";
+                uploadExcelBtn.innerHTML = '<span class="material-symbols-outlined btn-icon">sync</span> Sync Database';
                 uploadExcelBtn.style.opacity = "1";
                 uploadExcelBtn.disabled = false;
             }
         });
     }
+
     // --- Connect Red Button to Banner Upload ---
     const uploadBannerBtn = document.getElementById('uploadBannerBtn');
     
@@ -97,23 +90,22 @@ document.addEventListener('DOMContentLoaded', () => {
             uploadBannerBtn.disabled = true;
 
             try {
-                const response = await fetch('http://127.0.0.1:8000/api/upload-banner/', {
+                const response = await fetch(`${API_BASE_URL}/api/upload-banner/`, {
                     method: 'POST',
                     body: formData
                 });
 
                 if (response.ok) {
-                    // Using a simple browser alert for the hackathon speed
                     alert("🚨 Emergency Banner Deployed Successfully!");
                     bannerInput.value = "";
-                    document.getElementById('bannerFileName').textContent = 'No file selected';
+                    bannerFileName.textContent = 'No file selected';
                 } else {
                     alert("Error deploying banner. Check file type.");
                 }
             } catch (error) {
                 alert("Network Error: Is the FastAPI server running?");
             } finally {
-                uploadBannerBtn.textContent = "Deploy Alert";
+                uploadBannerBtn.innerHTML = '<span class="material-symbols-outlined btn-icon">send</span> Deploy Alert';
                 uploadBannerBtn.disabled = false;
             }
         });

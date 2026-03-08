@@ -1,204 +1,130 @@
-
-
-   document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     
+    // --- API Configuration (Smart Routing) ---
+    // Automatically switches between your laptop and the live server
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const API_BASE_URL = isLocal ? 'http://127.0.0.1:8000' : 'https://blw-secure-api.onrender.com';
+
     // 1. Spam-Click Protector (Debounce)
-    // Selects all the links inside the cards and sidebars
     const links = document.querySelectorAll('a.nav-link, .scrollable-list a');
-    
     links.forEach(link => {
         link.addEventListener('click', function(e) {
-            
-            // If the link was already clicked in the last 1.5 seconds, block it
             if (this.classList.contains('is-clicked')) {
                 e.preventDefault(); 
                 console.log("Spam click prevented!"); 
                 return;
             }
-            
-            // Otherwise, temporarily mark it as 'clicked'
             this.classList.add('is-clicked');
-            
-            // Unfreeze it after 1.5 seconds 
-            setTimeout(() => {
-                this.classList.remove('is-clicked');
-            }, 1500);
+            setTimeout(() => this.classList.remove('is-clicked'), 1500);
         });
     });
 
-   // 2. Live Search Filtering 
-   const searchInput = document.getElementById('searchInput');
-   // grab all the cards and sidebars so we can hide them entirely if they are empty
-   const allCards = document.querySelectorAll('.card, .sidebar');
+    // 2. Live Search Filtering 
+    const searchInput = document.getElementById('searchInput');
+    const allCards = document.querySelectorAll('.card, .sidebar');
 
-   if (searchInput) {
-       // 'input' is better than 'keyup' because it detects pasting and deleting instantly
-       searchInput.addEventListener('input', function(e) {
-           const searchTerm = e.target.value.toLowerCase();
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
 
-           allCards.forEach(card => {
-               const listItems = card.querySelectorAll('li');
-               let hasVisibleLinks = false; // Tracks if this card has any matches
+            allCards.forEach(card => {
+                const listItems = card.querySelectorAll('li');
+                let hasVisibleLinks = false; 
 
-               listItems.forEach(li => {
-                   const linkText = li.textContent.toLowerCase();
-                   
-                   if (linkText.includes(searchTerm)) {
-                       li.style.display = ''; // Show link
-                       hasVisibleLinks = true; // We found a match!
-                   } else {
-                       li.style.display = 'none'; // Hide link
-                   }
-               });
+                listItems.forEach(li => {
+                    const linkText = li.textContent.toLowerCase();
+                    if (linkText.includes(searchTerm)) {
+                        li.style.display = ''; 
+                        hasVisibleLinks = true; 
+                    } else {
+                        li.style.display = 'none'; 
+                    }
+                });
 
-               // If no links matched inside this specific card, hide the whole card!
-               // (Unless the search bar is empty, then show everything)
-               if (hasVisibleLinks || searchTerm === '') {
-                   card.style.display = '';
-               } else {
-                   card.style.display = 'none';
-               }
-           });
-       });
-   } else {
-       console.error("Search input not found! Check your HTML id.");
-   }
-
-   // 3. IMAGE SLIDER 
-   const slides = document.querySelectorAll('.slider-image');
-   const dots = document.querySelectorAll('.dot');
-   const prevBtn = document.getElementById('prevSlide');
-   const nextBtn = document.getElementById('nextSlide');
-   
-   let currentSlide = 0;
-   const slideInterval = 3000; // 3 seconds 
-   let autoSlideTimer;
-
-   
-   function changeSlide(nextIndex) {
-    // 1. Remove .active 
-    if (slides[currentSlide]) {
-        slides[currentSlide].classList.remove('active');
-    }
-    if (dots[currentSlide]) {
-        dots[currentSlide].classList.remove('active');
+                card.style.display = (hasVisibleLinks || searchTerm === '') ? '' : 'none';
+            });
+        });
     }
 
-    // 2. Update current index (handle wrapping around)
-    if (nextIndex >= slides.length) {
-        currentSlide = 0; // Wrap back to first
-    } else if (nextIndex < 0) {
-        currentSlide = slides.length - 1; // Wrap around to last
-    } else {
-        currentSlide = nextIndex; // Standard move
+    // 3. IMAGE SLIDER 
+    const slides = document.querySelectorAll('.slider-image');
+    const dots = document.querySelectorAll('.dot');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    
+    let currentSlide = 0;
+    const slideInterval = 3000; 
+    let autoSlideTimer;
+
+    function changeSlide(nextIndex) {
+        if (slides[currentSlide]) slides[currentSlide].classList.remove('active');
+        if (dots[currentSlide]) dots[currentSlide].classList.remove('active');
+
+        currentSlide = (nextIndex >= slides.length) ? 0 : (nextIndex < 0) ? slides.length - 1 : nextIndex;
+
+        if (slides[currentSlide]) slides[currentSlide].classList.add('active');
+        if (dots[currentSlide]) dots[currentSlide].classList.add('active');
     }
 
-    // 3. Add .active 
-    if (slides[currentSlide]) {
-        slides[currentSlide].classList.add('active');
+    function startAutoSlide() {
+        clearInterval(autoSlideTimer); 
+        autoSlideTimer = setInterval(() => changeSlide(currentSlide + 1), slideInterval);
     }
-    if (dots[currentSlide]) {
-        dots[currentSlide].classList.add('active');
+
+    function userInteract(action) {
+        changeSlide(action);
+        startAutoSlide(); 
     }
-}
 
-   //  TIMER LOGIC
-   function startAutoSlide() {
-       // Clear any existing timer so they don't double up
-       clearInterval(autoSlideTimer); 
-       autoSlideTimer = setInterval(() => {
-           changeSlide(currentSlide + 1);
-       }, slideInterval);
-   }
+    if (prevBtn && nextBtn && slides.length > 0) {
+        nextBtn.addEventListener('click', () => userInteract(currentSlide + 1));
+        prevBtn.addEventListener('click', () => userInteract(currentSlide - 1));
+        dots.forEach((dot, index) => dot.addEventListener('click', () => userInteract(index)));
+        startAutoSlide();
+    }
 
-   // INTERACTION LOGIC 
-   function userInteract(action) {
-       
-       changeSlide(action);
-       
-       startAutoSlide(); 
-   }
-
-   // --- Event Listeners for Buttons ---
-   if (prevBtn && nextBtn && slides.length > 0) {
-       nextBtn.addEventListener('click', () => userInteract(currentSlide + 1));
-       prevBtn.addEventListener('click', () => userInteract(currentSlide - 1));
-
-       //  Dot Listeners
-       dots.forEach((dot, index) => {
-           dot.addEventListener('click', () => userInteract(index));
-       });
-
-       // Start the engine
-       startAutoSlide();
-   }
-
-   // --- Smart Emergency Pop-up ---
+    // --- Smart Emergency Pop-up ---
     const emergencyModal = document.getElementById('emergencyModal');
     const closeModalBtn = document.getElementById('closeModal');
     const emergencyImage = document.getElementById('emergencyImage');
 
     if (emergencyModal && closeModalBtn && emergencyImage) {
-        
-        // 1. Ask the Python server if a custom banner exists
-        fetch('http://127.0.0.1:8000/api/get-banner/')
+        fetch(`${API_BASE_URL}/api/get-banner/`)
             .then(res => res.json())
             .then(data => {
-                // 2. If yes, swap the image source!
-                if (data.has_custom) {
-                    emergencyImage.src = data.url;
-                }
+                if (data.has_custom) emergencyImage.src = data.url;
             })
-            .catch(err => console.log("Using default banner..."))
+            .catch(() => console.log("Using default emergency banner."))
             .finally(() => {
-                // 3. Show the pop-up 1 second after the page loads
-                setTimeout(() => {
-                    emergencyModal.classList.add('show');
-                }, 1000);
+                setTimeout(() => emergencyModal.classList.add('show'), 1000);
             });
 
-        // Close when "X" is clicked
-        closeModalBtn.addEventListener('click', () => {
-            emergencyModal.classList.remove('show');
-        });
-
-        // Close if clicked outside the image
+        closeModalBtn.addEventListener('click', () => emergencyModal.classList.remove('show'));
         emergencyModal.addEventListener('click', (e) => {
-            if (e.target === emergencyModal) {
-                emergencyModal.classList.remove('show');
-            }
+            if (e.target === emergencyModal) emergencyModal.classList.remove('show');
         });
     }
 
-   // --- Dynamic Birthday Marquee ---
+    // --- Dynamic Birthday Marquee ---
     async function loadBirthdays() {
-        // Find the scrolling text tag
         const marquee = document.querySelector('.marquee-container marquee');
         if (!marquee) return;
 
         try {
-            // Ask the Python server for today's birthdays
-            const response = await fetch('http://127.0.0.1:8000/api/birthdays/today/');
+            const response = await fetch(`${API_BASE_URL}/api/birthdays/today/`);
             if (response.ok) {
                 const data = await response.json();
-                
-                // If there are birthdays today, update the scrolling text
                 if (data.birthdays && data.birthdays.length > 0) {
                     const namesString = data.birthdays.join("  ⭐  ");
                     marquee.textContent = `🎉 Banaras Locomotive Works wishes a very Happy Birthday to:  ${namesString} 🎉`;
-                    // Optional: Make it stand out more
                     marquee.style.fontWeight = "700";
                     marquee.style.color = "#b45309"; 
                 }
-                // If no birthdays, it just keeps your default system maintenance message!
             }
         } catch (error) {
-            console.error("Could not fetch birthdays from server.");
+            console.log("Could not fetch birthdays. Displaying default marquee.");
         }
     }
     
-    // Run it immediately when the page loads
     loadBirthdays();
-   
-
-}); 
+});
