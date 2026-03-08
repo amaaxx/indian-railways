@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -76,15 +76,17 @@ async def upload_excel(file: UploadFile = File(...)):
 
 @app.get("/api/birthdays/today/")
 def get_todays_birthdays():
-    # Get current date in MM-DD format (e.g., "03-08")
-    today_str = datetime.now().strftime("%m-%d") 
+    # 1. Force the server to use Indian Standard Time (UTC + 5:30)
+    ist_tz = timezone(timedelta(hours=5, minutes=30))
+    today_str = datetime.now(ist_tz).strftime("%m-%d") 
     
     celebrants = []
-    # Search the in-memory database
+    # 2. Search the database
     for emp in employee_data:
         dob = str(emp.get("DOB", ""))
-        # If their DOB ends with today's Month-Day, it's a match!
-        if dob.endswith(today_str):
+        # Using 'in' instead of 'endswith' makes it bulletproof just in case 
+        # Excel tries to add hidden timestamps (like 00:00:00) to the dates!
+        if today_str in dob:
             celebrants.append(f"{emp['Name']} ({emp['Department']})")
             
     return {"birthdays": celebrants}
