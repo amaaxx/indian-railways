@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLW Admin Portal | Secure Gateway</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-logo left-logo">
+            <img src="images/rail_logo2.png" alt="Indian Railways">
+        </div>
+        <div class="header-brand">
+            <h1>BLW Secure Admin Console</h1>
+            <p class="iso-cert">AUTHORIZED PERSONNEL ONLY</p>
+        </div>
+        </header>
+
+    <main class="admin-container">
+        
+        <section class="admin-card primary-card">
+            <div class="admin-header">
+                <span class="material-symbols-outlined" style="color: #2563eb;">table_chart</span>
+                <h2>Update Employee Birthdays</h2>
+            </div>
+            
+            <div class="info-banner info-blue">
+                <span class="material-symbols-outlined">info</span>
+                <p>Upload the master Excel (.xlsx) or CSV file. Required columns: <strong>Name, Department, DOB</strong>.</p>
+            </div>
+            
+            <form id="birthdayForm">
+                <label class="upload-zone" id="excelDropZone">
+                    <div class="upload-icon-wrapper blue-wrapper">
+                        <span class="material-symbols-outlined">cloud_upload</span>
+                    </div>
+                    <h3>Click to browse or drag Excel file here</h3>
+                    <p id="excelFileName">No file selected</p>
+                    <input type="file" id="excelInput" accept=".xlsx, .xls, .csv">
+                </label>
+                
+                <button type="button" class="btn-submit btn-blue" id="uploadExcelBtn">
+                    <span class="material-symbols-outlined btn-icon">sync</span>
+                    Sync Database
+                </button>
+                <div class="status-message" id="excelStatus">Database successfully updated!</div>
+            </form>
+        </section>
+
+        <section class="admin-card alert-card">
+            <div class="admin-header">
+                <span class="material-symbols-outlined" style="color: #dc2626;">warning</span>
+                <h2>Emergency Broadcast Banner</h2>
+            </div>
+            
+            <div class="info-banner info-red">
+                <span class="material-symbols-outlined">campaign</span>
+                <p>Upload a new JPEG or PNG to override the current emergency pop-up across the network.</p>
+            </div>
+            
+            <form id="bannerForm">
+                <label class="upload-zone" id="bannerDropZone">
+                    <div class="upload-icon-wrapper red-wrapper">
+                        <span class="material-symbols-outlined">add_photo_alternate</span>
+                    </div>
+                    <h3>Click to select new alert image</h3>
+                    <p id="bannerFileName">No file selected</p>
+                    <input type="file" id="bannerInput" accept="image/jpeg, image/png">
+                </label>
+                
+                <button type="button" class="btn-submit btn-red" id="uploadBannerBtn">
+                    <span class="material-symbols-outlined btn-icon">send</span>
+                    Deploy Alert
+                </button>
+            </form>
+        </section>
+
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Designed and Developed by IT Center, Banaras Locomotive Works.</p>
+        </div>
+    </footer>
+
+    <script src="admin.js"></script>
+</body>
+</html>

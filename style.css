@@ -1,5 +1,7 @@
-/* --- Global & Typography --- */
-@import url('https://fonts.googleapis.com/css2?family Inter:wght@400;500;600;700&display swap');
+/* =========================================
+   1. Global Variables & Typography
+   ========================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
     --primary-blue: #0f172a; 
@@ -22,10 +24,10 @@ body {
     -webkit-font-smoothing: antialiased; 
 }
 
-/*                                          
-   Main Enterprise Header (Navy Section)
-                                             */
-   .main-header {
+/* =========================================
+   2. Main Enterprise Header & Marquee
+   ========================================= */
+.main-header {
     background-color: #0f172a; 
     color: white;
     padding: 5px 4%; 
@@ -35,9 +37,7 @@ body {
     border-bottom: 4px solid #fbbf24; 
 }
 
-/*  Logo Styling */
-
-.header-logo  img {
+.header-logo img {
     height: 80px; 
     width: auto;
     background-color: white; 
@@ -45,7 +45,6 @@ body {
     border-radius: 8px; 
     box-shadow: 0 2px 4px rgba(0,0,0,0.3); 
 }
-
 
 .header-brand {
     text-align: center; 
@@ -80,7 +79,6 @@ body {
     opacity: 0.9;
 }
 
-
 .header-title h1 { margin: 0; font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
 .header-title span { font-size: 0.85rem; color: #94a3b8; font-weight: 400;}
 
@@ -93,12 +91,11 @@ body {
     border-bottom: 1px solid #fde047;
 }
 
-/*
-   Rebuilt Image Slider (Flex & Stacking)
-                                             */
-
-   .slider-container {
-    height: 400px; /* INCREASED: Gives the photos proper vertical breathing room */
+/* =========================================
+   3. Image Slider
+   ========================================= */
+.slider-container {
+    height: 400px; 
     width: 100%;
     position: relative;
     overflow: hidden; 
@@ -111,38 +108,30 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover; 
-    object-position: center center; /* UPDATED: Centers the focus on the middle of the photo */
+    object-position: center center; 
     opacity: 0; 
     transition: opacity 1.2s ease-in-out; 
     z-index: 1; 
 }
 
-/* The .active class that JavaScript will toggle */
 .slider-image.active {
-    opacity: 1; /* Show the active image */
-    z-index: 2; /* Put it on top of hidden images */
+    opacity: 1; 
+    z-index: 2; 
 }
 
-/* Separate layer for the linear gradient overlay */
 .slider-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
     background-image: linear-gradient(to right, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.2));
-    z-index: 3; /* Sits on top of images */
-    pointer-events: none; /* Let's clicks pass through to the arrows */
+    z-index: 3; 
+    pointer-events: none; 
 }
-
-
-
-
-
-/* Sleek Navigation Arrows */
 
 .slider-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.15); /* Glass effect */
+    background: rgba(255, 255, 255, 0.15); 
     color: white;
     border: none;
     width: 48px;
@@ -152,9 +141,9 @@ body {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10; /* Ensures buttons are ALWAYS clickable on top */
+    z-index: 10; 
     transition: all 0.2s ease;
-    backdrop-filter: blur(4px); /* Modern blur effect */
+    backdrop-filter: blur(4px); 
 }
 
 .slider-arrow:hover {
@@ -172,8 +161,6 @@ body {
 .slider-arrow span {
     font-size: 2rem;
 }
-
-/* Navigation Dots*/
 
 .slider-dots {
     position: absolute;
@@ -200,7 +187,52 @@ body {
     border-radius: 10px;
 }
 
-/* --- Main Layout Grid --- */
+/* =========================================
+   4. Search Container
+   ========================================= */
+.search-container {
+    width: 90%;
+    max-width: 750px; 
+    margin: -35px auto 40px auto; 
+    position: relative;
+    z-index: 100;
+}
+
+.search-pill {
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 50px;
+    padding: 8px 24px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.search-pill:focus-within {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(59, 130, 246, 0.3);
+    transform: translateY(-2px);
+}
+
+.search-pill span {
+    color: #64748b;
+    font-size: 1.6rem;
+    margin-right: 12px;
+}
+
+.search-pill input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 0;
+    font-size: 1.15rem;
+    color: #0f172a;
+    background: transparent;
+}
+
+/* =========================================
+   5. Main Grid Layout & Cards
+   ========================================= */
 .dashboard-container {
     display: grid;
     grid-template-columns: 280px 1fr 280px;
@@ -213,7 +245,6 @@ body {
     align-items: start;
 }
 
-/* --- Universal Card Styling --- */
 .sidebar, .card {
     background: var(--card-bg);
     border-radius: 16px; 
@@ -228,11 +259,9 @@ body {
     transform: translateY(-2px); 
 }
 
-/* Sticky Sidebar specific */
 .sidebar { position: sticky; top: 24px; max-height: calc(100vh - 48px); overflow-y: auto; }
 .sidebar::-webkit-scrollbar { width: 0px; }
 
-/* --- Headers for Sidebars and Cards --- */
 .card-header, .sidebar-header {
     padding: 20px 24px 12px 24px;
     font-weight: 600;
@@ -245,7 +274,6 @@ body {
     margin: 0;
 }
 
-/* colorful icon badges */
 .icon-badge {
     display: flex;
     align-items: center;
@@ -256,7 +284,6 @@ body {
     margin-right: 12px;
 }
 
-/* The Category Colors */
 .sidebar .icon-badge { background-color: #e0f2fe; color: #0284c7; }
 .card.it-apps { border-top: 4px solid #4f46e5; }
 .card.it-apps .icon-badge { background-color: #e0e7ff; color: #4338ca; }
@@ -269,7 +296,6 @@ body {
 .card.zonal { border-top: 4px solid #9333ea; }
 .card.zonal .icon-badge { background-color: #f3e8ff; color: #7e22ce; }
 
-/* Link Styling*/
 .card-body, .sidebar-body { padding: 8px 16px 20px 16px; }
 ul { list-style: none; padding: 0; margin: 0; }
 
@@ -302,13 +328,11 @@ a.nav-link:hover {
 
 a.nav-link:hover .arrow { opacity: 1; transform: translateX(0); }
 
-/* FLEX COLUMNS  */
 .center-content {
     display: flex;
     flex-direction: column;
 }
 
-/* Accessibility Focus State */
 a.nav-link:focus-visible, .scrollable-list a:focus-visible {
     outline: 3px solid var(--secondary-blue);
     outline-offset: 2px;
@@ -326,10 +350,9 @@ a.nav-link:focus-visible, .scrollable-list a:focus-visible {
     flex-direction: column;
     gap: 24px;
     flex: 1;
-    min-width: 0; /* Prevents text from breaking out */
+    min-width: 0; 
 }
 
-/* Scrollable Zonal List at the bottom */
 .scrollable-list {
     max-height: 250px;
     overflow-y: auto;
@@ -343,168 +366,11 @@ a.nav-link:focus-visible, .scrollable-list a:focus-visible {
 .scrollable-list::-webkit-scrollbar-track { background: transparent; }
 .scrollable-list::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 8px; }
 
-/*Footer*/
-footer { text-align: center; padding: 32px; color: var(--text-muted); font-size: 0.85rem; }
-
-/* Emergency Modal */
-.modal-overlay {
-    position: fixed; 
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.8); /* Dark navy blur effect */
-    display: flex; justify-content: center; align-items: center;
-    z-index: 9999; /* Ensures it sits on top of EVERYTHING */
-    opacity: 0; 
-    visibility: hidden;
-    transition: opacity 0.3s ease;
-}
-
-.modal-overlay.show {
-    opacity: 1; 
-    visibility: visible;
-}
-
-.modal-content {
-    background: white; 
-    padding: 15px;
-    border-radius: 12px;
-    position: relative; 
-    max-width: 550px; 
-    width: 90%;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-}
-
-.modal-content img {
-    max-width: 100%; 
-    max-height: 350px;
-    width: auto; /* Allows the image to shrink to its natural size */
-    margin: 0 auto; /* Perfectly centers the image inside the white box */
-    object-fit: contain;
-    display: block;
-    border-radius: 8px;
-}
-
-.close-modal {
-    position: absolute; 
-    top: -15px; right: -15px;
-    background: #dc2626; color: white;
-    width: 36px; height: 36px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; font-size: 1.5rem; font-weight: bold;
-    border: 3px solid white; 
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: background 0.2s ease;
-}
-
-.close-modal:hover { background: #991b1b; }
-
-
-
-/*    Responsive Design (Laptops, Tablets, Mobile)*/
-
-@media (max-width: 1400px) {
-    .dashboard-container {
-        grid-template-columns: 240px 1fr 240px; 
-        gap: 20px;
-        padding: 0 20px;
-    }
-    .sidebar-header, .card-header { font-size: 0.95rem; }
-}
-
-@media (max-width: 1080px) {
-    .main-header {
-        flex-direction: row; /* Keep elements in a line */
-        gap: 15px;
-        padding: 12px 5%;
-    }
-
-    .header-icon { display: none; }
-    .header-logo.right-logo {
-        display: none; /* Hide the right emblem on small screens to save space */
-    }
-    
-    .header-brand {
-        text-align: left; /* Re-align text to the left */
-        padding: 0;
-    }
-    
-    .header-brand h1 { font-size: 1.4rem; }
-    .header-brand .iso-cert { font-size: 0.75rem; }
-    .header-brand .contact-info { display: none; }
-
-    .slider-container {
-        height: 220px; /* Keeps the slider proportional on tablets and phones */
-    }
-    .slider-content h2 {
-        font-size: 1.6rem;
-    }
-    
-    .dashboard-container {
-        grid-template-columns: 1fr; 
-        margin-top: 20px; 
-        padding: 0 16px;
-    }
-    
-    /* On mobile, stack the card columns vertically */
-    .card-columns { flex-direction: column; }
-    
-    .sidebar {
-        position: relative;
-        top: 0;
-        max-height: none; 
-        overflow-y: visible;
-    }
-    .scrollable-list { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
-}
-
-@media (max-width: 480px) {
-    header { flex-direction: column; text-align: center; gap: 10px; }
-    .header-title h1 { font-size: 1.2rem; }
-}
-/* Container handles the floating position and overall width */
-.search-container {
-    width: 90%;
-    max-width: 750px; 
-    margin: -35px auto 40px auto; 
-    position: relative;
-    z-index: 100;
-}
-
-/* The Pill handles the background, shadow, and internal layout */
-.search-pill {
-    display: flex;
-    align-items: center;
-    background: white;
-    border-radius: 50px;
-    padding: 8px 24px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    border: 1px solid #e2e8f0;
-    transition: all 0.3s ease;
-}
-
-/* Glow effect when typing */
-.search-pill:focus-within {
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(59, 130, 246, 0.3);
-    transform: translateY(-2px);
-}
-
-.search-pill span {
-    color: #64748b;
-    font-size: 1.6rem;
-    margin-right: 12px;
-}
-
-.search-pill input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 10px 0;
-    font-size: 1.15rem;
-    color: #0f172a;
-    background: transparent;
-}
-/*  Footer  */
-   .main-footer {
-    background-color: #0f172a; /* Exact match to your top header */
+/* =========================================
+   6. Footer
+   ========================================= */
+.main-footer {
+    background-color: #0f172a; 
     color: #cbd5e1; 
     text-align: center;
     padding: 15px 10px;
@@ -520,6 +386,135 @@ footer { text-align: center; padding: 32px; color: var(--text-muted); font-size:
 
 .main-footer .footer-subtext {
     font-size: 0.8rem;
-    color: #94a3b8; /* Dimmer text for secondary information */
+    color: #94a3b8; 
     margin: 0;
+}
+
+/* =========================================
+   7. Smart Adaptive Modal
+   ========================================= */
+.modal-overlay {
+    position: fixed; 
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.8); 
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999; 
+    opacity: 0; 
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1; 
+    visibility: visible;
+}
+
+.modal-content {
+    background: transparent; 
+    padding: 0; 
+    position: relative; 
+    max-width: 650px; 
+    width: max-content; 
+    margin: 0 20px; 
+    display: flex;
+    justify-content: center;
+}
+
+.modal-content img {
+    max-width: 100%; 
+    max-height: 80vh; 
+    width: auto;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
+}
+
+.close-modal {
+    position: absolute; 
+    top: -15px; 
+    right: -15px; 
+    background: #dc2626; 
+    color: white;
+    width: 36px; 
+    height: 36px; 
+    border-radius: 50%;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    cursor: pointer; 
+    font-size: 1.5rem; 
+    font-weight: bold;
+    border: 3px solid white; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease, background 0.2s ease;
+    z-index: 10;
+}
+
+.close-modal:hover { 
+    background: #991b1b; 
+    transform: scale(1.1); 
+}
+
+/* =========================================
+   8. Media Queries (Mobile Responsiveness)
+   *MUST BE AT THE BOTTOM OF THE FILE*
+   ========================================= */
+@media (max-width: 1400px) {
+    .dashboard-container {
+        grid-template-columns: 240px 1fr 240px; 
+        gap: 20px;
+        padding: 0 20px;
+    }
+    .sidebar-header, .card-header { font-size: 0.95rem; }
+}
+
+@media (max-width: 1080px) {
+    .main-header {
+        flex-direction: row; 
+        gap: 15px;
+        padding: 12px 5%;
+    }
+
+    .header-icon { display: none; }
+    .header-logo.right-logo {
+        display: none; 
+    }
+    
+    .header-brand {
+        text-align: left; 
+        padding: 0;
+    }
+    
+    .header-brand h1 { font-size: 1.4rem; }
+    .header-brand .iso-cert { font-size: 0.75rem; }
+    .header-brand .contact-info { display: none; }
+
+    .slider-container {
+        height: 220px; 
+    }
+    .slider-content h2 {
+        font-size: 1.6rem;
+    }
+    
+    .dashboard-container {
+        grid-template-columns: 1fr; 
+        margin-top: 20px; 
+        padding: 0 16px;
+    }
+    
+    .card-columns { flex-direction: column; }
+    
+    .sidebar {
+        position: relative;
+        top: 0;
+        max-height: none; 
+        overflow-y: visible;
+    }
+    .scrollable-list { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}
+
+@media (max-width: 480px) {
+    header { flex-direction: column; text-align: center; gap: 10px; }
+    .header-title h1 { font-size: 1.2rem; }
 }

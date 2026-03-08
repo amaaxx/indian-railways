@@ -133,29 +133,72 @@
        startAutoSlide();
    }
 
-   // Emergency Pop-up 
-   const emergencyModal = document.getElementById('emergencyModal');
-   const closeModalBtn = document.getElementById('closeModal');
+   // --- Smart Emergency Pop-up ---
+    const emergencyModal = document.getElementById('emergencyModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const emergencyImage = document.getElementById('emergencyImage');
 
-   if (emergencyModal && closeModalBtn) {
-       // Show pop-up 1 second after page loads
-       setTimeout(() => {
-           emergencyModal.classList.add('show');
-       }, 1000);
+    if (emergencyModal && closeModalBtn && emergencyImage) {
+        
+        // 1. Ask the Python server if a custom banner exists
+        fetch('http://127.0.0.1:8000/api/get-banner/')
+            .then(res => res.json())
+            .then(data => {
+                // 2. If yes, swap the image source!
+                if (data.has_custom) {
+                    emergencyImage.src = data.url;
+                }
+            })
+            .catch(err => console.log("Using default banner..."))
+            .finally(() => {
+                // 3. Show the pop-up 1 second after the page loads
+                setTimeout(() => {
+                    emergencyModal.classList.add('show');
+                }, 1000);
+            });
 
-       // Close when "X" is clicked
-       closeModalBtn.addEventListener('click', () => {
-           emergencyModal.classList.remove('show');
-       });
+        // Close when "X" is clicked
+        closeModalBtn.addEventListener('click', () => {
+            emergencyModal.classList.remove('show');
+        });
 
-       // Close if clicked outside the image
-       emergencyModal.addEventListener('click', (e) => {
-           if (e.target === emergencyModal) {
-               emergencyModal.classList.remove('show');
-           }
-       });
-   }
+        // Close if clicked outside the image
+        emergencyModal.addEventListener('click', (e) => {
+            if (e.target === emergencyModal) {
+                emergencyModal.classList.remove('show');
+            }
+        });
+    }
 
+   // --- Dynamic Birthday Marquee ---
+    async function loadBirthdays() {
+        // Find the scrolling text tag
+        const marquee = document.querySelector('.marquee-container marquee');
+        if (!marquee) return;
+
+        try {
+            // Ask the Python server for today's birthdays
+            const response = await fetch('http://127.0.0.1:8000/api/birthdays/today/');
+            if (response.ok) {
+                const data = await response.json();
+                
+                // If there are birthdays today, update the scrolling text
+                if (data.birthdays && data.birthdays.length > 0) {
+                    const namesString = data.birthdays.join("  ⭐  ");
+                    marquee.textContent = `🎉 Banaras Locomotive Works wishes a very Happy Birthday to:  ${namesString} 🎉`;
+                    // Optional: Make it stand out more
+                    marquee.style.fontWeight = "700";
+                    marquee.style.color = "#b45309"; 
+                }
+                // If no birthdays, it just keeps your default system maintenance message!
+            }
+        } catch (error) {
+            console.error("Could not fetch birthdays from server.");
+        }
+    }
+    
+    // Run it immediately when the page loads
+    loadBirthdays();
    
 
 }); 
