@@ -9,7 +9,8 @@
     <link rel="preload" as="image" href="https://images.unsplash.com/photo-1541427468627-a89a96e5ca1d?q=80&w=2070&auto=format&fit=crop">
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="fixed-layout">
+    
     <div id="emergencyModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-modal" id="closeModal">&times;</span>
@@ -21,241 +22,153 @@
         <div class="header-logo left-logo">
             <img src="images/rail_logo2.png" alt="Indian Railways">
         </div>
-
         <div class="header-brand">
             <h1>Banaras Locomotive Works, Varanasi</h1>
             <p class="iso-cert">AN IRIS (ISO 22163), ISO 9001, 14001, 45001, & 5-S CERTIFIED ORGANIZATION</p>
             <p class="contact-info">Varanasi-221004, Uttar Pradesh (India) | Tel.: 0542-2270589-90, Fax: 0542-2270603</p>
         </div>
-
         <div class="header-logo right-logo">
             <img src="images/emblem_logo2.png" alt="Satyameva Jayate">
         </div>
     </header>
 
-    <div class="marquee-container">
-        <marquee behavior="scroll" direction="left">Welcome to Banaras Locomotive Works, Varanasi | System Maintenance scheduled for Sunday 02:00 AM.</marquee>
-    </div>
-
-    <div class="slider-container">
-        
-        <div class="slider-wrapper">
-            <img src="images/slide 1.png" class="slider-image active" alt="Manufactured Locomotive">
-            <img src="images/slide 2.webp" class="slider-image" alt="Indian Railways Team">
-            <img src="images/slide 3.png" class="slider-image" alt="Indian Railways Team">
-            <img src="images/slide 4.jpeg" class="slider-image" alt="Indian Railways Team">
-        </div>
-
-        <div class="slider-overlay"></div>
-
-        
-
-        <button class="slider-arrow prev" id="prevSlide">
-            <span class="material-symbols-outlined">chevron_left</span>
-        </button>
-        <button class="slider-arrow next" id="nextSlide">
-            <span class="material-symbols-outlined">chevron_right</span>
-        </button>
-
-        <div class="slider-dots">
-            <span class="dot active"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
-        </div>
-    </div>
-
-    <div class="search-container">
-        <div class="search-pill">
-            <span class="material-symbols-outlined">search</span>
-            <input type="text" id="searchInput" placeholder="Search for portals, apps, or forms...">
-        </div>
-    </div>
-
-    <div class="dashboard-container">
-        
-        <aside class="sidebar">
-            <h3 class="sidebar-header">
-                <div class="icon-badge">
-                    <span class="material-symbols-outlined">bolt</span>
-                </div>
-                Important Links
-            </h3>
-            <div class="sidebar-body">
-                <ul>
-                    <li><a href="https://parichay.nic.in/pnv1/assets/login?sid=eOfficeRailAU" target="_blank" rel="noopener noreferrer" class="nav-link">e-Office <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="https://aims.indianrailways.gov.in" target="_blank" rel="noopener noreferrer" class="nav-link">IPAS <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="https://www.ireps.gov.in" target="_blank" rel="noopener noreferrer" class="nav-link">IREPS <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="https://www.ireps.gov.in/iMMS/logon" target="_blank" rel="noopener noreferrer" class="nav-link">UDM <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="https://dlwerp.indianrailways.gov.in" target="_blank" rel="noopener noreferrer" class="nav-link">ERP <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="https://blw.indianrailways.gov.in" target="_blank" rel="noopener noreferrer" class="nav-link">BLW Website <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="http://10.13.2.5/mmis/" target="_blank" rel="noopener noreferrer" class="nav-link">MMIS / iMMS <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="http://10.13.2.5/ppnc/(S(4lp4w1n0igmejj2uiq3lta45))/index.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">PPNC <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="http://10.13.8.100/ndabooking/" target="_blank" rel="noopener noreferrer" class="nav-link">Booking Register <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                </ul>
-            </div>
-        </aside>
-
-        <main class="center-content">
+    <nav class="top-navbar">
+        <ul class="nav-menu">
             
-            <div class="card-columns">
-                
-                <div class="card-col">
-                    
-                    <section class="card it-apps">
-                        <div class="card-header">
-                            <div class="icon-badge">
-                                <span class="material-symbols-outlined">desktop_windows</span>
-                            </div>
-                            IT Center Apps
-                        </div>
-                        <div class="card-body">
-                            <ul>
-                                <li><a href="http://10.13.2.5/hwmaintain/comp_peri.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">Register PC & Peripherals</a></li>
-                                <li><a href="http://10.13.2.5/rtireg/rpf_login.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">Lorry Gate Register</a></li>
-                                <li><a href="http://10.13.2.5/rtireg/accounts.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">New Lorry Gate</a></li>
-                                <li><a href="http://10.13.2.5/rtireg/" target="_blank" rel="noopener noreferrer" class="nav-link">Outsider Bill Registration</a></li>
-                                <li><a href="http://10.13.2.5/rtireg/" target="_blank" rel="noopener noreferrer" class="nav-link">RTI Registration</a></li>
-                                <li><a href="http://10.13.2.5/hwmaintain/dlwdak.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">E-Notice Board</a></li>
-                                <li><a href="http://10.13.2.5/rtireg/login_courtcase.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">Court Case Register</a></li>
-                                <li><a href="http://10.13.2.5/rtireg/login_cts.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">Lifting Devices (LDITMS)</a></li>
-                                <li><a href="http://10.13.2.5/rtireg/login_acms.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">Audit Case Mgmt (ACMS)</a></li>
-                                <li><a href="http://10.13.2.5/blwmitra/" target="_blank" rel="noopener noreferrer" class="nav-link">Diesel Mitra</a></li>
-                                <li><a href="http://10.13.2.5/rtireg/ccmt_login.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">CCMT</a></li>
-                            </ul>
-                        </div>
-                    </section>
-
-                    <section class="card dashboards">
-                        <div class="card-header">
-                            <div class="icon-badge">
-                                <span class="material-symbols-outlined">bar_chart</span>
-                            </div>
-                            BI Dashboards
-                        </div>
-                        <div class="card-body">
-                            <ul>
-                                <li><a href="https://lookerstudio.google.com/u/0/reporting/5ae9680f-4579-4308-bc6f-263664b2cf95/page/1XUxD" target="_blank" rel="noopener noreferrer" class="nav-link">M&P Master & Breakdown</a></li>
-                                <li><a href="https://lookerstudio.google.com/u/0/reporting/e961b54f-d3dc-4061-b3b7-869aec78c34d/page/xddxD" target="_blank" rel="noopener noreferrer" class="nav-link">Plan Head 41 & 42 Reports</a></li>
-                                <li><a href="https://lookerstudio.google.com/u/0/reporting/15301f0b-370e-460a-ac0a-04c32a227acf/page/o1ouB" target="_blank" rel="noopener noreferrer" class="nav-link">Electric Loco Dispatch</a></li>
-                            </ul>
-                        </div>
-                    </section>
-
+            <li class="nav-item">
+                <a href="#" class="dropbtn">Core Links <span class="material-symbols-outlined">expand_more</span></a>
+                <div class="dropdown-content">
+                    <a href="https://parichay.nic.in/pnv1/assets/login?sid=eOfficeRailAU" target="_blank" rel="noopener noreferrer">e-Office</a>
+                    <a href="https://aims.indianrailways.gov.in" target="_blank" rel="noopener noreferrer">IPAS</a>
+                    <a href="https://www.ireps.gov.in" target="_blank" rel="noopener noreferrer">IREPS</a>
+                    <a href="https://www.ireps.gov.in/iMMS/logon" target="_blank" rel="noopener noreferrer">UDM</a>
+                    <a href="https://dlwerp.indianrailways.gov.in" target="_blank" rel="noopener noreferrer">ERP</a>
+                    <a href="https://blw.indianrailways.gov.in" target="_blank" rel="noopener noreferrer">BLW Website</a>
+                    <a href="http://10.13.2.5/mmis/" target="_blank" rel="noopener noreferrer">MMIS / iMMS</a>
+                    <a href="http://10.13.2.5/ppnc/(S(4lp4w1n0igmejj2uiq3lta45))/index.aspx" target="_blank" rel="noopener noreferrer">PPNC</a>
+                    <a href="http://10.13.8.100/ndabooking/" target="_blank" rel="noopener noreferrer">Booking Register</a>
                 </div>
+            </li>
 
-                <div class="card-col">
-                    
-                    <section class="card employees">
-                        <div class="card-header">
-                            <div class="icon-badge">
-                                <span class="material-symbols-outlined">groups</span>
-                            </div>
-                            Employees Corner
-                        </div>
-                        <div class="card-body">
-                            <ul>
-                                <li><a href="http://10.13.2.5/digidoc/" target="_blank" rel="noopener noreferrer" class="nav-link">Employee Digidocs</a></li>
-                                <li><a href="https://dlwcms.org/" target="_blank" rel="noopener noreferrer" class="nav-link">Lodge Civil Complaint</a></li>
-                                <li><a href="https://shebox.wcd.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">SHE-BOX Online Complaint</a></li>
-                                <li><a href="https://eoffsigner.eoffice.gov.in:55101/check/isLive" target="_blank" rel="noopener noreferrer" class="nav-link">Checklive Signer</a></li>
-                                <li><a href="https://blw.indianrailways.gov.in/view_section.jsp?lang=0&id=0,295,696" target="_blank" rel="noopener noreferrer" class="nav-link">Technical Training Center</a></li>
-                                <li><a href="#" class="nav-link">Integrity Pledge</a></li>
-                                <li><a href="#" class="nav-link">Retirement Guide</a></li>
-                            </ul>
-                        </div>
-                    </section>
-
-                    <section class="card downloads">
-                        <div class="card-header">
-                            <div class="icon-badge">
-                                <span class="material-symbols-outlined">folder_zip</span>
-                            </div>
-                            Downloads & Forms
-                        </div>
-                        <div class="card-body">
-                            <ul>
-                                <li><a href="http://10.13.2.5/hwmaintain/ITC_vetforms.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">IT Center Technical Forms</a></li>
-                                <li><a href="https://drive.google.com/file/d/1TxZ5putA7c_DpbodQV_mvHpfc6pLtGdf/view" target="_blank" rel="noopener noreferrer" class="nav-link">DSC Signer Service</a></li>
-                                <li><a href="#" class="nav-link">ORH Booking Form</a></li>
-                                <li><a href="#" class="nav-link">Disaster Management Plan</a></li>
-                                <li><a href="#" class="nav-link">Emergency Manual</a></li>
-                                <li><a href="#" class="nav-link">BLW & IR Directory</a></li>
-                            </ul>
-                        </div>
-                    </section>
-
+            <li class="nav-item">
+                <a href="#" class="dropbtn">IT & Dashboards <span class="material-symbols-outlined">expand_more</span></a>
+                <div class="dropdown-content mega-menu">
+                    <a href="http://10.13.2.5/hwmaintain/comp_peri.aspx" target="_blank" rel="noopener noreferrer">Register PC & Peripherals</a>
+                    <a href="http://10.13.2.5/rtireg/rpf_login.aspx" target="_blank" rel="noopener noreferrer">Lorry Gate Register</a>
+                    <a href="http://10.13.2.5/rtireg/accounts.aspx" target="_blank" rel="noopener noreferrer">New Lorry Gate</a>
+                    <a href="http://10.13.2.5/rtireg/" target="_blank" rel="noopener noreferrer">Outsider Bill Registration</a>
+                    <a href="http://10.13.2.5/rtireg/" target="_blank" rel="noopener noreferrer">RTI Registration</a>
+                    <a href="http://10.13.2.5/hwmaintain/dlwdak.aspx" target="_blank" rel="noopener noreferrer">E-Notice Board</a>
+                    <a href="http://10.13.2.5/rtireg/login_courtcase.aspx" target="_blank" rel="noopener noreferrer">Court Case Register</a>
+                    <a href="http://10.13.2.5/rtireg/login_cts.aspx" target="_blank" rel="noopener noreferrer">Lifting Devices (LDITMS)</a>
+                    <a href="http://10.13.2.5/rtireg/login_acms.aspx" target="_blank" rel="noopener noreferrer">Audit Case Mgmt (ACMS)</a>
+                    <a href="http://10.13.2.5/blwmitra/" target="_blank" rel="noopener noreferrer">Diesel Mitra</a>
+                    <a href="http://10.13.2.5/rtireg/ccmt_login.aspx" target="_blank" rel="noopener noreferrer">CCMT</a>
+                    <a href="https://lookerstudio.google.com/u/0/reporting/5ae9680f-4579-4308-bc6f-263664b2cf95/page/1XUxD" target="_blank" rel="noopener noreferrer">M&P Master & Breakdown</a>
+                    <a href="https://lookerstudio.google.com/u/0/reporting/e961b54f-d3dc-4061-b3b7-869aec78c34d/page/xddxD" target="_blank" rel="noopener noreferrer">Plan Head 41 & 42 Reports</a>
+                    <a href="https://lookerstudio.google.com/u/0/reporting/15301f0b-370e-460a-ac0a-04c32a227acf/page/o1ouB" target="_blank" rel="noopener noreferrer">Electric Loco Dispatch</a>
                 </div>
+            </li>
 
-            </div> <section class="card zonal">
-                <div class="card-header">
-                    <div class="icon-badge">
-                        <span class="material-symbols-outlined">route</span>
-                    </div>
-                    Rly. Board & Zonal PU's
+            <li class="nav-item">
+                <a href="#" class="dropbtn">Employee Corner <span class="material-symbols-outlined">expand_more</span></a>
+                <div class="dropdown-content">
+                    <a href="http://10.13.2.5/digidoc/" target="_blank" rel="noopener noreferrer">Employee Digidocs</a>
+                    <a href="https://dlwcms.org/" target="_blank" rel="noopener noreferrer">Lodge Civil Complaint</a>
+                    <a href="https://shebox.wcd.gov.in/" target="_blank" rel="noopener noreferrer">SHE-BOX Online Complaint</a>
+                    <a href="https://eoffsigner.eoffice.gov.in:55101/check/isLive" target="_blank" rel="noopener noreferrer">Checklive Signer</a>
+                    <a href="https://blw.indianrailways.gov.in/view_section.jsp?lang=0&id=0,295,696" target="_blank" rel="noopener noreferrer">Technical Training Center</a>
+                    <a href="#" class="nav-link">Integrity Pledge</a>
+                    <a href="#" class="nav-link">Retirement Guide</a>
                 </div>
-                <div class="card-body">
-                    <ul class="scrollable-list">
-                        <li><a href="https://indianrailways.gov.in/railwayboard/" target="_blank" rel="noopener noreferrer" class="nav-link">Railway Board (RB)</a></li>
-                        <li><a href="http://10.180.2.19/" target="_blank" rel="noopener noreferrer" class="nav-link">ECoR</a></li>
-                        <li><a href="http://10.31.2.32/" target="_blank" rel="noopener noreferrer" class="nav-link">CR</a></li>
-                        <li><a href="http://10.4.2.21/" target="_blank" rel="noopener noreferrer" class="nav-link">ER</a></li>
-                        <li><a href="http://10.141.2.19/" target="_blank" rel="noopener noreferrer" class="nav-link">NWR</a></li>
-                        <li><a href="http://10.2.2.19/" target="_blank" rel="noopener noreferrer" class="nav-link">NR</a></li>
-                        <li><a href="http://10.205.2.21/" target="_blank" rel="noopener noreferrer" class="nav-link">SWR</a></li>
-                        <li><a href="http://10.150.2.19/" target="_blank" rel="noopener noreferrer" class="nav-link">WCR</a></li>
-                        <li><a href="http://10.3.2.55/" target="_blank" rel="noopener noreferrer" class="nav-link">WR</a></li>
-                        <li><a href="https://ecr.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">ECR</a></li>
-                        <li><a href="http://10.102.2.19/ncr/index.html" target="_blank" rel="noopener noreferrer" class="nav-link">NCR</a></li>
-                        <li><a href="http://10.42.2.20/" target="_blank" rel="noopener noreferrer" class="nav-link">NFR</a></li>
-                        <li><a href="https://scr.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">SCR</a></li>
-                        <li><a href="http://10.41.2.100/" target="_blank" rel="noopener noreferrer" class="nav-link">SER</a></li>
-                        <li><a href="https://secr.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">SECR</a></li>
-                        <li><a href="https://ner.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">NER</a></li>
-                        <li><a href="https://sr.railnet.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">SR</a></li>
-                        <li><a href="https://www.kmrc.in/" target="_blank" rel="noopener noreferrer" class="nav-link">Kolkata Metro</a></li>
-                        <li><a href="https://clw.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">CLW</a></li>
-                        <li><a href="https://rwf.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">RWF, Bangalore</a></li>
-                        <li><a href="https://plw.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">DCW, Patiala</a></li>
-                        <li><a href="https://rcf.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">RCFo, Kapoorthala</a></li>
-                        <li><a href="https://icf.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">ICF, Chennai</a></li>
-                        <li><a href="https://einspection.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">E inspection Portal</a></li>
-                    </ul>
-                </div>
-            </section>
+            </li>
 
-        </main>
-
-        <aside class="sidebar">
-            <h3 class="sidebar-header">
-                <div class="icon-badge">
-                    <span class="material-symbols-outlined">lock</span>
+            <li class="nav-item">
+                <a href="#" class="dropbtn">Forms & Logins <span class="material-symbols-outlined">expand_more</span></a>
+                <div class="dropdown-content">
+                    <a href="https://aims.indianrailways.gov.in/ress" target="_blank" rel="noopener noreferrer">RESS Login</a>
+                    <a href="https://hrms.indianrail.gov.in/HRMS/" target="_blank" rel="noopener noreferrer">HRMS Login</a>
+                    <a href="https://pravas.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">PRAVAS</a>
+                    <a href="https://sparrow.railnet.gov.in/SPARROW" target="_blank" rel="noopener noreferrer">SPARROW Login</a>
+                    <a href="http://10.13.8.100/qtr_noticeboard/index.php" target="_blank" rel="noopener noreferrer">BLW Quarter Allotment</a>
+                    <a href="http://10.13.2.5/dlwogh2020/ogh_login.aspx" target="_blank" rel="noopener noreferrer">OGH Booking</a>
+                    <a href="http://www.dlwrecruitment.org/visit/visitor_main_pc.aspx" target="_blank" rel="noopener noreferrer">Visitor e Pass</a>
+                    <a href="http://10.13.2.5/hwmaintain/ITC_vetforms.aspx" target="_blank" rel="noopener noreferrer">IT Center Technical Forms</a>
+                    <a href="https://drive.google.com/file/d/1TxZ5putA7c_DpbodQV_mvHpfc6pLtGdf/view" target="_blank" rel="noopener noreferrer">DSC Signer Service</a>
+                    <a href="#">ORH Booking Form</a>
+                    <a href="#">Disaster Management Plan</a>
+                    <a href="#">Emergency Manual</a>
+                    <a href="#">BLW & IR Directory</a>
+                    <a href="#">E-mail Login</a>
+                    <a href="#">Model SOP</a>
                 </div>
-                Portals & Logins
-            </h3>
-            <div class="sidebar-body">
-                <ul>
-                    <li><a href="https://aims.indianrailways.gov.in/ress" target="_blank" rel="noopener noreferrer" class="nav-link">RESS Login <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="https://hrms.indianrail.gov.in/HRMS/" target="_blank" rel="noopener noreferrer" class="nav-link">HRMS Login <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="https://pravas.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer" class="nav-link">PRAVAS <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="https://sparrow.railnet.gov.in/SPARROW" target="_blank" rel="noopener noreferrer" class="nav-link">SPARROW Login <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="http://10.13.8.100/qtr_noticeboard/index.php" target="_blank" rel="noopener noreferrer" class="nav-link">BLW Quarter Allotment <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="http://10.13.2.5/dlwogh2020/ogh_login.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">OGH Booking <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="http://www.dlwrecruitment.org/visit/visitor_main_pc.aspx" target="_blank" rel="noopener noreferrer" class="nav-link">Visitor e Pass <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="#" class="nav-link">E-mail Login <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                    <li><a href="#" class="nav-link">Model SOP <span class="material-symbols-outlined arrow">chevron_right</span></a></li>
-                </ul>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="dropbtn">Zonal PU's <span class="material-symbols-outlined">expand_more</span></a>
+                <div class="dropdown-content Zonal-dropdown mega-menu zonal-mega">
+                    <a href="https://indianrailways.gov.in/railwayboard/" target="_blank" rel="noopener noreferrer">Railway Board (RB)</a>
+                    <a href="http://10.180.2.19/" target="_blank" rel="noopener noreferrer">ECoR</a>
+                    <a href="http://10.31.2.32/" target="_blank" rel="noopener noreferrer">CR</a>
+                    <a href="http://10.4.2.21/" target="_blank" rel="noopener noreferrer">ER</a>
+                    <a href="http://10.141.2.19/" target="_blank" rel="noopener noreferrer">NWR</a>
+                    <a href="http://10.2.2.19/" target="_blank" rel="noopener noreferrer">NR</a>
+                    <a href="http://10.205.2.21/" target="_blank" rel="noopener noreferrer">SWR</a>
+                    <a href="http://10.150.2.19/" target="_blank" rel="noopener noreferrer">WCR</a>
+                    <a href="http://10.3.2.55/" target="_blank" rel="noopener noreferrer">WR</a>
+                    <a href="https://ecr.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">ECR</a>
+                    <a href="http://10.102.2.19/ncr/index.html" target="_blank" rel="noopener noreferrer">NCR</a>
+                    <a href="http://10.42.2.20/" target="_blank" rel="noopener noreferrer">NFR</a>
+                    <a href="https://scr.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">SCR</a>
+                    <a href="http://10.41.2.100/" target="_blank" rel="noopener noreferrer">SER</a>
+                    <a href="https://secr.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">SECR</a>
+                    <a href="https://ner.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">NER</a>
+                    <a href="https://sr.railnet.gov.in/" target="_blank" rel="noopener noreferrer">SR</a>
+                    <a href="https://www.kmrc.in/" target="_blank" rel="noopener noreferrer">Kolkata Metro</a>
+                    <a href="https://clw.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">CLW</a>
+                    <a href="https://rwf.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">RWF, Bangalore</a>
+                    <a href="https://plw.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">DCW, Patiala</a>
+                    <a href="https://rcf.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">RCFo, Kapoorthala</a>
+                    <a href="https://icf.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">ICF, Chennai</a>
+                    <a href="https://einspection.indianrailways.gov.in/" target="_blank" rel="noopener noreferrer">E inspection Portal</a>
+                </div>
+            </li>
+        </ul>
+
+        <div class="nav-search">
+            <span class="material-symbols-outlined">search</span>
+            <input type="text" id="searchInput" placeholder="Search portals...">
+        </div>
+    </nav>
+
+    <main class="fixed-main">
+        <div class="slider-container flex-slider">
+            <div class="slider-wrapper">
+                <img src="images/slide 1.png" class="slider-image active" alt="Manufactured Locomotive">
+                <img src="images/slide 2.webp" class="slider-image" alt="Indian Railways Team">
+                <img src="images/slide 3.png" class="slider-image" alt="Indian Railways Team">
+                <img src="images/slide 4.jpeg" class="slider-image" alt="Indian Railways Team">
             </div>
-        </aside>
+            <div class="slider-overlay"></div>
 
+            <button class="slider-arrow prev" id="prevSlide"><span class="material-symbols-outlined">chevron_left</span></button>
+            <button class="slider-arrow next" id="nextSlide"><span class="material-symbols-outlined">chevron_right</span></button>
+
+            <div class="slider-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </main>
+
+    <div class="marquee-container bottom-marquee">
+        <div class="marquee-content" id="birthdayMarquee">
+            Welcome to Banaras Locomotive Works, Varanasi | System Maintenance scheduled for Sunday 02:00 AM.
+        </div>
     </div>
 
-    <footer class="main-footer">
-        <div class="footer-content">
-            <p>&copy; 2026 Designed and Developed by IT Center, Banaras Locomotive Works.</p>
-            <p class="footer-subtext">All rights reserved. | Internal Gateway Portal</p>
-        </div>
-    </footer>
     <script src="script.js"></script>
 </body>
 </html>
