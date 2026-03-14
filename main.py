@@ -1,7 +1,7 @@
 import os
 import shutil
-import pandas as pd
-import jwt
+import pandas as pd # type: ignore
+import jwt #type:ignore
 from datetime import datetime, timezone, timedelta
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles

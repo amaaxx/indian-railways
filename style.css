@@ -327,7 +327,7 @@ body {
     overflow: hidden;
     white-space: nowrap;
     background: linear-gradient(to bottom, #f7df66 0%, #e4dd67 100%); 
-    padding: 10px 0;
+    padding: 1px 0;
     border-top: 2px solid #ca8a04;
     z-index: 200;
     box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
