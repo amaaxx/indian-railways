@@ -1,17 +1,21 @@
-from datetime import datetime, timezone, timedelta
-from fastapi import FastAPI, File, UploadFile, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-import pandas as pd
-import io
 import os
 import shutil
-import time
+import pandas as pd
+import jwt
+from datetime import datetime, timezone, timedelta
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import declarative_base, sessionmaker, Session
+from passlib.context import CryptContext
 
-app = FastAPI(title="BLW Admin API")
+# --- 1. CONFIGURATION & SETUP ---
+SECRET_KEY = "BLW_SUPER_SECRET_SECURE_KEY_2026"
+ALGORITHM = "HS256"
 
-# --- CORS Configuration ---
-# This allows your HTML frontend to talk to this Python backend safely
+app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -20,99 +24,129 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- FOLDER SETUP FOR IMAGES ---
-# Create a folder to store the uploaded banners if it doesn't exist
-if not os.path.exists("uploads"):
-    os.makedirs("uploads")
-
-# Tell FastAPI to make this folder publicly accessible via the web
+os.makedirs("uploads", exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
-# --- IN-MEMORY DATABASE ---
-# For tomorrow's presentation, we will hold the data in memory.
-# Next week, you can easily swap this out for SQLite or PostgreSQL.
-employee_data = []
+# --- 2. DATABASE ARCHITECTURE ---
+SQLALCHEMY_DATABASE_URL = "sqlite:///./blw_database.db"
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
-@app.get("/")
-def read_root():
-    return {"status": "BLW Server is actively running"}
+class Employee(Base):
+    __tablename__ = "employees"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+    department = Column(String)
+    dob = Column(String)
 
-@app.post("/api/upload-excel/")
-async def upload_excel(file: UploadFile = File(...)):
-    # 1. Security check: Ensure it's an Excel or CSV file
-    if not file.filename.endswith(('.xlsx', '.xls', '.csv')):
-        raise HTTPException(status_code=400, detail="Invalid format. Please upload an Excel or CSV file.")
-    
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+
+Base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = SessionLocal()
     try:
-        # 2. Read the file into memory
-        contents = await file.read()
-        
-        # 3. Parse it with Pandas
-        if file.filename.endswith('.csv'):
-            df = pd.read_csv(io.BytesIO(contents))
-        else:
-            df = pd.read_excel(io.BytesIO(contents))
-            
-        # 4. Verify Teertha's required columns exist
-        required_columns = ['Name', 'Department', 'DOB']
-        if not all(col in df.columns for col in required_columns):
-            raise HTTPException(status_code=400, detail=f"File must contain exact columns: {', '.join(required_columns)}")
-            
-        # 5. Clean the dates and save to our "database"
-        df['DOB'] = df['DOB'].astype(str)
-        
-        global employee_data
-        employee_data = df.to_dict(orient="records")
-        
-        return {
-            "message": "Database successfully synchronized!", 
-            "total_records": len(employee_data),
-            "preview": employee_data[:3] # Send back a 3-row preview as proof
-        }
-        
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+        yield db
+    finally:
+        db.close()
 
+# --- 3. SECURITY & AUTHENTICATION ---
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/login")
+
+def create_access_token(data: dict):
+    expire = datetime.utcnow() + timedelta(hours=12)
+    to_encode = data.copy()
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+def init_admin():
+    db = SessionLocal()
+    admin = db.query(User).filter(User.username == "admin").first()
+    if not admin:
+        hashed_pw = pwd_context.hash("blw@2026")
+        new_admin = User(username="admin", hashed_password=hashed_pw)
+        db.add(new_admin)
+        db.commit()
+    db.close()
+
+init_admin()
+
+@app.post("/api/login")
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.username == form_data.username).first()
+    if not user or not pwd_context.verify(form_data.password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    
+    token = create_access_token(data={"sub": user.username})
+    return {"access_token": token, "token_type": "bearer"}
+
+def verify_token(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload.get("sub")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+# --- 4. CORE API ENDPOINTS ---
+@app.post("/api/upload-excel/")
+async def upload_excel(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: str = Depends(verify_token)):
+    try:
+        if file.filename.endswith('.csv'):
+            df = pd.read_csv(file.file)
+        else:
+            df = pd.read_excel(file.file)
+
+        required_cols = ["Name", "Department", "DOB"]
+        if not all(col in df.columns for col in required_cols):
+            raise HTTPException(status_code=400, detail="File must contain exact columns: Name, Department, DOB")
+
+        db.query(Employee).delete()
+        records_added = 0
+        for _, row in df.iterrows():
+            new_emp = Employee(
+                name=str(row["Name"]),
+                department=str(row["Department"]),
+                dob=str(row["DOB"])
+            )
+            db.add(new_emp)
+            records_added += 1
+        
+        db.commit()
+        return {"status": "success", "total_records": records_added}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/birthdays/today/")
-def get_todays_birthdays():
-    # 1. Force the server to use Indian Standard Time (UTC + 5:30)
+def get_todays_birthdays(db: Session = Depends(get_db)):
     ist_tz = timezone(timedelta(hours=5, minutes=30))
-    today_str = datetime.now(ist_tz).strftime("%m-%d") 
+    today_str = datetime.now(ist_tz).strftime("%m-%d")
     
-    celebrants = []
-    # 2. Search the database
-    for emp in employee_data:
-        dob = str(emp.get("DOB", ""))
-        # Using 'in' instead of 'endswith' makes it bulletproof just in case 
-        # Excel tries to add hidden timestamps (like 00:00:00) to the dates!
-        if today_str in dob:
-            celebrants.append(f"{emp['Name']} ({emp['Department']})")
+    employees = db.query(Employee).all()
+    celebrants = [f"{emp.name} ({emp.department})" for emp in employees if today_str in str(emp.dob)]
             
     return {"birthdays": celebrants}
 
-# --- NEW: BANNER UPLOAD ENDPOINTS ---
-
 @app.post("/api/upload-banner/")
-async def upload_banner(file: UploadFile = File(...)):
-    if not file.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
-        raise HTTPException(status_code=400, detail="Only JPEG or PNG images are allowed.")
-
-    # Always overwrite the exact same file to keep the server clean
-    file_location = "uploads/emergency_banner.jpg"
-    with open(file_location, "wb+") as file_object:
-        shutil.copyfileobj(file.file, file_object)
-
-    return {"message": "Emergency banner updated successfully!"}
+async def upload_banner(file: UploadFile = File(...), current_user: str = Depends(verify_token)):
+    os.makedirs("uploads", exist_ok=True)
+    file_path = "uploads/emergency_banner.jpg" 
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+        
+    return {"message": "Success", "url": "/uploads/emergency_banner.jpg"}
 
 @app.get("/api/get-banner/")
-def get_banner():
-    # Check if a custom banner has been uploaded
+async def get_banner():
     if os.path.exists("uploads/emergency_banner.jpg"):
-        # The ?t= timestamp is a "Cache Buster". It forces the browser to 
-        # download the new image instead of using an old saved version.
-        return {
-            "has_custom": True, 
-            "url": f"http://127.0.0.1:8000/uploads/emergency_banner.jpg?t={int(time.time())}"
-        }
-    return {"has_custom": False}
+        return {"url": "/uploads/emergency_banner.jpg"}
+    return {"url": None}

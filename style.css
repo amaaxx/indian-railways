@@ -81,7 +81,7 @@ body {
 }
 
 /* =========================================
-   3. Top Navigation Bar (Dropdowns)
+   3. Top Navigation Bar & Search
    ========================================= */
 .top-navbar {
     display: flex;
@@ -112,7 +112,7 @@ body {
     text-decoration: none;
     font-weight: 600;
     font-size: 0.95rem;
-    transition: color 0.2s;
+    transition: color 0.3s ease;
     position: relative;
 }
 
@@ -129,7 +129,7 @@ body {
 }
 
 .nav-item:hover .dropbtn::after {
-    width: 100%; /* The underline grows on hover! */
+    width: 60%;
 }
 
 .dropbtn .material-symbols-outlined {
@@ -146,28 +146,27 @@ body {
     position: absolute;
     top: 100%;
     left: 0;
-    /* Changed to slightly transparent white with a blur effect */
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px); 
     min-width: 280px;
     max-height: 65vh; 
     overflow-y: auto; 
-    box-shadow: 0px 15px 35px rgba(0,0,0,0.1); /* Softer, larger shadow */
-    border-radius: 0 0 12px 12px; /* Smoother bottom corners */
+    box-shadow: 0px 15px 35px rgba(0,0,0,0.1);
+    border-radius: 0 0 12px 12px;
     border: 1px solid rgba(226, 232, 240, 0.8);
     border-top: none;
-    padding: 8px 0; /* Adds breathing room at the top and bottom of the list */
+    padding: 8px 0;
 }
 
 .Zonal-dropdown { left: auto; right: 0; }
 
 .dropdown-content a {
     color: #334155;
-    padding: 10px 24px; /* Tightened vertically, widened horizontally */
+    padding: 10px 24px;
     text-decoration: none;
     display: block;
     font-size: 0.9rem;
-    font-weight: 500; /* Made text slightly crisper */
+    font-weight: 500;
     transition: all 0.2s ease;
 }
 
@@ -181,25 +180,25 @@ body {
     display: block;
     animation: fadeIn 0.2s ease-in-out;
 }
-/* --- Enterprise Mega Menu --- */
+
+/* Mega Menu */
 .mega-menu {
     min-width: 550px !important;
-    column-count: 2; /* Splits the list into two columns */
+    column-count: 2;
     column-gap: 10px;
     padding: 12px 10px !important;
 }
 
 .mega-menu.zonal-mega {
     min-width: 750px !important;
-    column-count: 3; /* The Zonal list is huge, so we use 3 columns */
+    column-count: 3;
 }
 
-/* Remove the bottom borders in the mega menu so it looks cleaner */
 .mega-menu a {
     border-bottom: none !important;
     border-radius: 6px;
     margin: 2px 0;
-    break-inside: avoid-column; /* Prevents a link from being cut in half across columns */
+    break-inside: avoid-column;
 }
 
 @keyframes fadeIn {
@@ -207,11 +206,10 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Nav Search Bar --- */
+/* Nav Search Bar */
 .nav-search {
     display: flex;
     align-items: center;
-    background: #f8fafc;
     background: #f1f5f9;
     border-radius: 24px;
     padding: 6px 16px;
@@ -219,9 +217,9 @@ body {
     transition: border-color 0.3s;
 }
 .nav-search:focus-within {
-    border-color: #2563eb;
+    border-color: #facc15;
     background: #ffffff;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.15);
 }
 .nav-search input {
     border: none;
@@ -233,7 +231,7 @@ body {
 }
 
 /* =========================================
-   4. Main Image Slider (Fixed Area)
+   4. Main Image Slider (Cinematic Upgrade)
    ========================================= */
 .fixed-main {
     flex: 1; 
@@ -242,104 +240,112 @@ body {
     background: #000; 
 }
 
-.flex-slider {
+.flex-slider, .slider-wrapper {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.slider-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
 }
 
 .slider-image {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; 
-    height: 100%;
-    object-fit: cover;
-    object-position: center 20%;
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; /* Back to perfect edge-to-edge filling */
+    object-position: center; 
     opacity: 0;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1;
 }
 
-.slider-image.active {
-    opacity: 1;
-    z-index: 10;
-}
+.slider-image.active { opacity: 1; z-index: 10; }
 
+/* 1. The Cinematic Vignette (Bottom-Up Fade instead of Left-to-Right Mud) */
 .slider-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background-image: linear-gradient(to right, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.2));
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0) 40%);
     z-index: 15; 
-    pointer-events: none; /* Crucial for buttons to work */
+    pointer-events: none;
 }
 
-/* Controls */
+/* 2. Minimalist Floating Arrows (No heavy circles) */
 .slider-arrow {
-    position: absolute;
-    top: 50%;
+    position: absolute; top: 50%;
     transform: translateY(-50%);
     z-index: 50 !important;
     cursor: pointer;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    background: transparent; /* Stripped the background completely */
     border: none;
-    border-radius: 50%;
-    width: 48px; height: 48px;
+    color: rgba(255, 255, 255, 0.5); /* Soft translucent white */
+    width: 80px; height: 100px; /* Taller hit area */
     display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(4px);
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
-.slider-arrow:hover { background: rgba(0, 0, 0, 0.8); transform: translateY(-50%) scale(1.1); }
-.slider-arrow.prev { left: 30px; }
-.slider-arrow.next { right: 30px; }
-.slider-arrow span { font-size: 2rem; }
+.slider-arrow span { 
+    font-size: 4rem; /* Massive, ultra-thin arrows */
+    font-weight: 200;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.6); /* Dropshadow so they float */
+}
 
+.slider-arrow:hover { 
+    color: #ffffff; /* Turns pure white on hover */
+    transform: translateY(-50%) scale(1.1); 
+}
+
+/* Push arrows closer to the edges */
+.slider-arrow.prev { left: 10px; } 
+.slider-arrow.next { right: 10px; }
+
+/* 3. Thicker, High-End Progress Bars */
 .slider-dots {
     position: absolute;
-    bottom: 30px;
-    left: 50%;
+    bottom: 25px; left: 50%;
     transform: translateX(-50%);
-    z-index: 50 !important;
-    display: flex;
-    gap: 12px;
+    display: flex; gap: 10px; z-index: 100;
 }
 
 .dot {
-    width: 10px; height: 10px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    width: 35px; height: 6px; /* Thicker and wider */
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 6px; cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); /* Inner shadow for depth */
 }
-.dot.active { background: white; width: 24px; border-radius: 10px; }
+
+.dot:hover { background: rgba(255, 255, 255, 0.6); }
+
+.dot.active { 
+    width: 70px; /* Extra long to show progress clearly */
+    background: #facc15; 
+    box-shadow: 0 0 15px rgba(250, 204, 21, 0.5); /* Soft gold aura */
+}
 
 /* =========================================
-   5. Animated Bottom Marquee
+   5. Sun-Kissed Traditional Marquee
    ========================================= */
 .bottom-marquee {
     overflow: hidden;
     white-space: nowrap;
-    background: #fef3c7;
-    padding: 8px 0;
-    border-top: 2px solid #f59e0b;
-    z-index: 200; /* Keeps it strictly on top of the slider */
+    background: linear-gradient(to bottom, #f7df66 0%, #e4dd67 100%); 
+    padding: 10px 0;
+    border-top: 2px solid #ca8a04;
+    z-index: 200;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .marquee-content {
     display: inline-block;
-    padding-left: 100%; 
-    animation: marquee-loop 25s linear infinite; 
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #92400e;
+    padding-left: 100%;
+    animation: marquee-loop 25s linear infinite;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e293b; 
+    letter-spacing: 0.5px;
+}
+
+.marquee-content .highlight {
+    color: #854d0e; 
+    text-shadow: 0.5px 0.5px 0px rgba(255,255,255,0.4);
 }
 
 @keyframes marquee-loop {
@@ -388,4 +394,5 @@ body {
     border: 3px solid white; 
     z-index: 10;
 }
+
 .close-modal:hover { background: #991b1b; transform: scale(1.1); }
