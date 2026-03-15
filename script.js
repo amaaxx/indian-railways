@@ -79,11 +79,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalBtn = document.getElementById('closeModal');
     const emergencyImage = document.getElementById('emergencyImage');
 
-    // FIX: Added the logic to close the modal!
+    // Logic to close the modal
     if (closeModalBtn && emergencyModal) {
         closeModalBtn.addEventListener('click', () => {
             emergencyModal.classList.remove('show');
         });
+    }
+
+    if (emergencyModal && emergencyImage) {
+        // Fetch the banner URL from the backend
+        fetch(`${API_BASE_URL}/api/get-banner/?timestamp=${new Date().getTime()}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.url) {
+                // --- THE FIX IS HERE ---
+                // If it's a Cloudinary link, use it directly. 
+                // If it's a local fallback (starts with /), attach the Render URL.
+                let finalImageUrl = data.url.startsWith('http') 
+                    ? data.url 
+                    : `${API_BASE_URL}${data.url}`;
+                
+                // Add timestamp to bust browser cache
+                emergencyImage.src = `${finalImageUrl}?t=${new Date().getTime()}`;
+                
+                // Show the modal
+                emergencyModal.classList.add('show');
+            }
+        })
+        .catch(err => console.error("Banner fetch failed:", err));
     }
 
     if (emergencyModal && emergencyImage) {
