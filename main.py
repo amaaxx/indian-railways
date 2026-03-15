@@ -7,20 +7,28 @@ from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, Text
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from passlib.context import CryptContext
+import cloudinary
+import cloudinary.uploader
 
 # --- 1. CONFIGURATION & SETUP ---
 SECRET_KEY = "BLW_SUPER_SECRET_SECURE_KEY_2026"
 ALGORITHM = "HS256"
 
+# Attempt to configure Cloudinary (Will do nothing if ENV variable is missing locally)
+CLOUDINARY_URL = os.environ.get("CLOUDINARY_URL")
+if CLOUDINARY_URL:
+    cloudinary.config(cloudinary_url=CLOUDINARY_URL)
+
 app = FastAPI()
-# --- Updated CORS Middleware ---
+
+# --- CORS Middleware ---
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "https://indian-railways-six.vercel.app", # Your specific Vercel domain
+    "https://indian-railways-six.vercel.app", # Your Vercel domain
 ]
 
 app.add_middleware(
@@ -31,22 +39,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Local fallback for image uploads
 os.makedirs("uploads", exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # --- 2. DATABASE ARCHITECTURE ---
-# Securely fetch the database URL from Render's Environment Variables.
-# If it doesn't exist (e.g., you are coding locally), it falls back to SQLite.
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
-# SQLAlchemy requires 'postgresql://', but Supabase sometimes provides 'postgres://'
+# Supabase fix for SQLAlchemy
 if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 SQLALCHEMY_DATABASE_URL = DATABASE_URL or "sqlite:///./blw_database.db"
 
-# SQLite requires a special argument, but PostgreSQL will crash if you include it.
-# This dynamic check ensures the code works perfectly on both your laptop AND the cloud.
+# Dynamic engine creation (SQLite needs special args, Postgres will crash with them)
 if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
     engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
 else:
@@ -67,6 +73,12 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+
+class Setting(Base):
+    __tablename__ = "settings"
+    id = Column(Integer, primary_key=True)
+    key = Column(String, unique=True, index=True)
+    value = Column(Text) # Will store the Cloudinary URL
 
 Base.metadata.create_all(bind=engine)
 
@@ -158,17 +170,45 @@ def get_todays_birthdays(db: Session = Depends(get_db)):
     return {"birthdays": celebrants}
 
 @app.post("/api/upload-banner/")
-async def upload_banner(file: UploadFile = File(...), current_user: str = Depends(verify_token)):
-    os.makedirs("uploads", exist_ok=True)
-    file_path = "uploads/emergency_banner.jpg" 
-    
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+async def upload_banner(file: UploadFile = File(...), db: Session = Depends(get_db), current_user: str = Depends(verify_token)):
+    try:
+        # If Cloudinary is configured (Production), upload there
+        if CLOUDINARY_URL:
+            upload_result = cloudinary.uploader.upload(file.file, folder="blw_portal")
+            banner_url = upload_result.get("secure_url")
+        # Fallback to local storage (Development)
+        else:
+            os.makedirs("uploads", exist_ok=True)
+            file_path = "uploads/emergency_banner.jpg"
+            with open(file_path, "wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+            banner_url = "/uploads/emergency_banner.jpg"
+
+        # Save/Update the URL in the database
+        setting = db.query(Setting).filter(Setting.key == "emergency_banner").first()
+        if setting:
+            setting.value = banner_url
+        else:
+            new_setting = Setting(key="emergency_banner", value=banner_url)
+            db.add(new_setting)
         
-    return {"message": "Success", "url": "/uploads/emergency_banner.jpg"}
+        db.commit()
+        return {"message": "Success", "url": banner_url}
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Upload Error: {str(e)}")
 
 @app.get("/api/get-banner/")
-async def get_banner():
+async def get_banner(db: Session = Depends(get_db)):
+    # Fetch the URL directly from the database
+    setting = db.query(Setting).filter(Setting.key == "emergency_banner").first()
+    
+    # If the database has a record, return it
+    if setting and setting.value:
+         return {"url": setting.value}
+         
+    # Fallback for old local development testing
     if os.path.exists("uploads/emergency_banner.jpg"):
         return {"url": "/uploads/emergency_banner.jpg"}
+        
     return {"url": None}
