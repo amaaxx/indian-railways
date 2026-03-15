@@ -103,10 +103,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     let slash = cleanUrl.startsWith('/') ? '' : '/';
                     finalImageUrl = `${API_BASE_URL}${slash}${cleanUrl}`;
                 }
+                // 1. Tell the image what to do ONLY AFTER it finishes downloading
+                emergencyImage.onload = function() {
+                    emergencyModal.classList.add('show'); // Pop the modal safely
+                };
                 
                 // Load image and show modal
                 emergencyImage.src = `${finalImageUrl}?t=${new Date().getTime()}`;
-                emergencyModal.classList.add('show');
+                
             }
         })
         .catch(err => console.error("Banner fetch failed:", err));
