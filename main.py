@@ -16,9 +16,16 @@ SECRET_KEY = "BLW_SUPER_SECRET_SECURE_KEY_2026"
 ALGORITHM = "HS256"
 
 app = FastAPI()
+# --- Updated CORS Middleware ---
+origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://indian-railways-six.vercel.app", # Your specific Vercel domain
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=origins, 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
