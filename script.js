@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeModalBtn = document.getElementById('closeModal');
     const emergencyImage = document.getElementById('emergencyImage');
 
-    // Logic to close the modal
     if (closeModalBtn && emergencyModal) {
         closeModalBtn.addEventListener('click', () => {
             emergencyModal.classList.remove('show');
@@ -87,35 +86,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (emergencyModal && emergencyImage) {
-        // Fetch the banner URL from the backend
         fetch(`${API_BASE_URL}/api/get-banner/?timestamp=${new Date().getTime()}`)
         .then(response => response.json())
         .then(data => {
             if (data.url) {
-                // --- THE FIX IS HERE ---
-                // If it's a Cloudinary link, use it directly. 
-                // If it's a local fallback (starts with /), attach the Render URL.
-                let finalImageUrl = data.url.startsWith('http') 
-                    ? data.url 
-                    : `${API_BASE_URL}${data.url}`;
+                // 1. Remove any accidental spaces
+                let cleanUrl = data.url.trim();
+                let finalImageUrl = cleanUrl;
                 
-                // Add timestamp to bust browser cache
+                // 2. The Nuclear Check: If the URL contains 'http' anywhere, extract it.
+                if (cleanUrl.includes('http')) {
+                    let httpIndex = cleanUrl.indexOf('http');
+                    finalImageUrl = cleanUrl.substring(httpIndex); 
+                } else {
+                    // 3. It's a local fallback (make sure we don't double-slash)
+                    let slash = cleanUrl.startsWith('/') ? '' : '/';
+                    finalImageUrl = `${API_BASE_URL}${slash}${cleanUrl}`;
+                }
+                
+                // Load image and show modal
                 emergencyImage.src = `${finalImageUrl}?t=${new Date().getTime()}`;
-                
-                // Show the modal
-                emergencyModal.classList.add('show');
-            }
-        })
-        .catch(err => console.error("Banner fetch failed:", err));
-    }
-
-    if (emergencyModal && emergencyImage) {
-        fetch(`${API_BASE_URL}/api/get-banner/?timestamp=${new Date().getTime()}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.url) {
-                // Add timestamp to image src to bust cache
-                emergencyImage.src = `${API_BASE_URL}${data.url}?t=${new Date().getTime()}`;
                 emergencyModal.classList.add('show');
             }
         })
