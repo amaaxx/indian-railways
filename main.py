@@ -35,8 +35,23 @@ os.makedirs("uploads", exist_ok=True)
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # --- 2. DATABASE ARCHITECTURE ---
-SQLALCHEMY_DATABASE_URL = "sqlite:///./blw_database.db"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+# Securely fetch the database URL from Render's Environment Variables.
+# If it doesn't exist (e.g., you are coding locally), it falls back to SQLite.
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+# SQLAlchemy requires 'postgresql://', but Supabase sometimes provides 'postgres://'
+if DATABASE_URL and DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+SQLALCHEMY_DATABASE_URL = DATABASE_URL or "sqlite:///./blw_database.db"
+
+# SQLite requires a special argument, but PostgreSQL will crash if you include it.
+# This dynamic check ensures the code works perfectly on both your laptop AND the cloud.
+if SQLALCHEMY_DATABASE_URL.startswith("sqlite"):
+    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
