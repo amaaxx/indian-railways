@@ -32,7 +32,7 @@ body {
 }
 
 /* =========================================
-   2. Main Header (Made More Prominent)
+   2. Main Header
    ========================================= */
 .main-header {
     background-color: #0f172a; 
@@ -61,11 +61,11 @@ body {
 }
 
 .header-brand h1 {
-    font-size: 2.3rem; /* Increased significantly for prominence */
-    font-weight: 800; /* Extra bold */
+    font-size: 2.3rem; 
+    font-weight: 800; 
     margin: 0 0 4px 0; 
     letter-spacing: 0.8px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.6); /* Makes the name stand out */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.6); 
 }
 
 .header-brand .iso-cert {
@@ -82,11 +82,11 @@ body {
 }
 
 /* =========================================
-   3. Top Navigation Bar & Search (Depth Decreased)
+   3. Top Navigation Bar & Search
    ========================================= */
 .top-navbar {
     padding: 0 4%; 
-    height: 50px; /* Decreased depth significantly */
+    height: 50px; 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -121,7 +121,7 @@ body {
     font-size: 0.92rem;
     font-weight: 600; 
     white-space: nowrap;
-    padding: 6px 12px; /* Tighter vertical padding to fit new depth */
+    padding: 6px 12px; 
     border-radius: 6px; 
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -130,7 +130,7 @@ body {
 .dropbtn::after {
     content: '';
     position: absolute;
-    bottom: -6px; /* Sits perfectly below the text */
+    bottom: -6px; 
     left: 10px;
     right: 10px;
     height: 3px;
@@ -175,7 +175,7 @@ body {
     border: 1px solid rgba(226, 232, 240, 0.8);
     border-top: none;
     padding: 8px 0;
-    margin-top: 2px; /* Slight offset */
+    margin-top: 2px; 
 }
 
 .Zonal-dropdown { left: auto; right: 0; }
@@ -226,7 +226,7 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Nav Search Bar (Fixed 'h' squish issue) */
+/* Nav Search Bar */
 .nav-search {
     display: flex;
     align-items: center;
@@ -250,7 +250,7 @@ body {
     background: transparent;
     outline: none;
     margin-left: 10px;
-    flex: 1; /* This fixes the squished text bug */
+    flex: 1; 
     font-size: 0.9rem;
     font-weight: 400;
     color: #0f172a;
@@ -262,7 +262,7 @@ body {
 }
 
 /* =========================================
-   4. Main Image Slider (Cinematic Upgrade)
+   4. Main Image Slider
    ========================================= */
 .fixed-main {
     flex: 1; 
@@ -423,3 +423,91 @@ body {
 }
 
 .close-modal:hover { background: #991b1b; transform: scale(1.1); }
+
+/* =========================================
+   7. RESPONSIVE MEDIA QUERIES
+   ========================================= */
+
+/* MacBooks & Smaller Laptops (1024px - 1440px) */
+@media (max-width: 1200px) {
+    .header-brand h1 { font-size: 1.8rem; }
+    .nav-search { width: 220px; }
+    .nav-search:focus-within { width: 260px; }
+}
+
+/* Tablets & iPads (768px - 1024px) */
+@media (max-width: 1024px) {
+    .header-logo img { height: 60px; }
+    .header-brand h1 { font-size: 1.5rem; }
+    .header-brand .contact-info { font-size: 0.75rem; }
+    
+    .mega-menu, .mega-menu.zonal-mega {
+        min-width: 100% !important; 
+        column-count: 2; 
+        left: 0; right: 0;
+    }
+}
+
+/* Smartphones (Less than 768px) */
+@media (max-width: 768px) {
+    /* Header Stacks Vertically */
+    .main-header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px 4%;
+    }
+    .header-brand h1 { font-size: 1.3rem; }
+    .header-brand .iso-cert { font-size: 0.75rem; }
+    .header-brand .contact-info { display: none; /* Hide to save vertical space */ }
+    
+    /* Navbar becomes a swipeable row */
+    .top-navbar {
+        height: auto;
+        flex-direction: column;
+        padding: 10px 4%;
+        gap: 12px;
+    }
+    
+    .nav-menu {
+        width: 100%;
+        overflow-x: auto; /* Enables horizontal scrolling */
+        padding-bottom: 5px;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        scrollbar-width: none; /* Hide scrollbar Firefox */
+    }
+    
+    .nav-menu::-webkit-scrollbar { display: none; /* Hide scrollbar Chrome/Safari */ }
+    
+    .nav-search { width: 100%; }
+    .nav-search:focus-within { width: 100%; }
+
+    /* Fix Dropdowns for Mobile */
+    .dropdown-content, .mega-menu, .mega-menu.zonal-mega {
+        position: fixed;
+        top: 190px; /* Sit right below the stacked header */
+        left: 5%;
+        right: 5%;
+        width: 90%;
+        min-width: 0 !important;
+        column-count: 1; /* Drop to single column */
+        max-height: 50vh;
+    }
+
+    /* Shrink Slider Elements */
+    .slider-arrow { width: 40px; }
+    .slider-arrow span { font-size: 2.5rem; }
+    .slider-arrow.prev { left: 5px; } 
+    .slider-arrow.next { right: 5px; }
+    
+    .dot { width: 25px; height: 5px; }
+    .dot.active { width: 45px; }
+
+    /* Adjust Modal */
+    .modal-content { width: 90%; margin: 0 auto; }
+    .close-modal { 
+        top: -10px; right: -10px; 
+        width: 30px; height: 30px; 
+        font-size: 1.2rem; 
+    }
+}

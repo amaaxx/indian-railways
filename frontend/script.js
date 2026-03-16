@@ -1,8 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- API Configuration ---
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const API_BASE_URL = isLocal ? 'http://127.0.0.1:8000' : 'https://blw-secure-api.onrender.com';
+    // --- API Configuration (Dynamic Intranet IP) ---
+    const API_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":8000";
 
     // --- 1. NEW Dropdown Search Logic ---
     const searchInput = document.getElementById('searchInput');
@@ -90,33 +89,22 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(response => response.json())
         .then(data => {
             if (data.url) {
-                // 1. Remove any accidental spaces
                 let cleanUrl = data.url.trim();
-                let finalImageUrl = cleanUrl;
-                
-                // 2. The Nuclear Check: If the URL contains 'http' anywhere, extract it.
-                if (cleanUrl.includes('http')) {
-                    let httpIndex = cleanUrl.indexOf('http');
-                    finalImageUrl = cleanUrl.substring(httpIndex); 
-                } else {
-                    // 3. It's a local fallback (make sure we don't double-slash)
-                    let slash = cleanUrl.startsWith('/') ? '' : '/';
-                    finalImageUrl = `${API_BASE_URL}${slash}${cleanUrl}`;
-                }
-                // 1. Tell the image what to do ONLY AFTER it finishes downloading
+                let slash = cleanUrl.startsWith('/') ? '' : '/';
+                let finalImageUrl = `${API_BASE_URL}${slash}${cleanUrl}`;
+
                 emergencyImage.onload = function() {
-                    emergencyModal.classList.add('show'); // Pop the modal safely
+                    emergencyModal.classList.add('show'); 
                 };
                 
-                // Load image and show modal
                 emergencyImage.src = `${finalImageUrl}?t=${new Date().getTime()}`;
-                
             }
         })
         .catch(err => console.error("Banner fetch failed:", err));
     }
 
-    // --- 4. Dynamic Birthday Marquee ---
+    
+   // --- 4. Dynamic Birthday Marquee ---
     async function loadBirthdays() {
         const marquee = document.getElementById('birthdayMarquee');
         if (!marquee) return;
@@ -126,9 +114,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 const data = await response.json();
                 if (data.birthdays && data.birthdays.length > 0) {
-                    // FIX: Added the span class so the gold color applies!
                     const namesString = data.birthdays.map(name => `<span class="highlight">${name}</span>`).join("  •  ");
                     marquee.innerHTML = `🎉 CURRENT UPDATES: Happy Birthday to ${namesString} 🎉`;
+                    
+                    // --- THE SPEED FIX ---
+                    // 1. Get the total number of characters in the new text
+                    const textLength = marquee.innerText.length;
+                    
+                    // 2. Give the animation 0.15 seconds per character to scroll
+                    // (Increase 0.15 to make it slower, decrease to make it faster)
+                    const dynamicDuration = textLength * 0.15; 
+                    
+                    // 3. Apply the dynamic time to the CSS animation
+                    marquee.style.animationDuration = `${dynamicDuration}s`;
                 }
             }
         } catch (error) {
