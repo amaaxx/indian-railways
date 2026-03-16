@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- API Configuration (Dynamic Intranet IP) ---
-    const API_BASE_URL = window.location.protocol + "//" + window.location.hostname + ":8000";
+    // --- API Configuration ---
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const API_BASE_URL = isLocal ? 'http://127.0.0.1:8000' : 'https://blw-secure-api.onrender.com'; 
+    // (Make sure to use your actual Render URL if it's different!)
 
     // --- 1. NEW Dropdown Search Logic ---
     const searchInput = document.getElementById('searchInput');
@@ -90,8 +92,17 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.url) {
                 let cleanUrl = data.url.trim();
-                let slash = cleanUrl.startsWith('/') ? '' : '/';
-                let finalImageUrl = `${API_BASE_URL}${slash}${cleanUrl}`;
+                let finalImageUrl = cleanUrl;
+                
+                // The Nuclear Check: If it's a Cloudinary link (http), use it directly.
+                if (cleanUrl.includes('http')) {
+                    let httpIndex = cleanUrl.indexOf('http');
+                    finalImageUrl = cleanUrl.substring(httpIndex); 
+                } else {
+                    // Fallback for local testing
+                    let slash = cleanUrl.startsWith('/') ? '' : '/';
+                    finalImageUrl = `${API_BASE_URL}${slash}${cleanUrl}`;
+                }
 
                 emergencyImage.onload = function() {
                     emergencyModal.classList.add('show'); 
@@ -103,8 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(err => console.error("Banner fetch failed:", err));
     }
 
-    
-   // --- 4. Dynamic Birthday Marquee ---
+    // --- 4. Dynamic Birthday Marquee ---
     async function loadBirthdays() {
         const marquee = document.getElementById('birthdayMarquee');
         if (!marquee) return;
