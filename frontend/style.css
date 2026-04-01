@@ -511,3 +511,56 @@ body {
         font-size: 1.2rem; 
     }
 }
+/* =========================================
+   📱 MOBILE RESPONSIVE TWEAKS (Under 768px)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    
+    /* 1. Shrink the Header & Text */
+    .header { /* Change to your actual header class */
+        padding: 10px !important;
+    }
+    .header h1 {
+        font-size: 1.4rem !important; /* Shrinks the massive BLW title */
+        margin: 5px 0;
+    }
+    .header p { /* The ISO text */
+        font-size: 0.7rem !important;
+        line-height: 1.2;
+    }
+
+    /* 2. Make the Logos Smaller and Side-by-Side */
+    .header-logos { /* Change to the div holding your logos */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 5px;
+    }
+    .header-logos img {
+        height: 45px !important; /* Stops them from being huge */
+        width: auto;
+    }
+
+    /* 3. The "Swipeable" Navigation Bar Fix */
+    /* This stops the menus from wrapping and breaking the layout */
+    .top-navbar ul {
+        display: flex;
+        flex-wrap: nowrap; /* Forces them onto one line */
+        overflow-x: auto;  /* Adds a horizontal scroll */
+        padding: 10px 5px;
+        -webkit-overflow-scrolling: touch; /* Smooth swiping on iPhones */
+        white-space: nowrap;
+    }
+    
+    /* Hide the scrollbar for a cleaner look but keep it swipeable */
+    .top-navbar ul::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* 4. Tighten up the Search Bar */
+    .search-container {
+        padding: 5px 15px;
+        margin-bottom: 10px;
+    }
+}
